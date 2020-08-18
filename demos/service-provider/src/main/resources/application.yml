@@ -1,0 +1,14 @@
+server:
+  port: 8020
+spring:
+  application:
+    name: service-provider
+  cloud:
+    nacos:
+      discovery:
+        #当不是一个局域网时，需指定ip。否则nacos会访问当前内网ip导致无法访问
+        ip: 106.55.246.217
+        server-addr: 106.55.246.217:8848
+    sentinel:
+      transport:
+        dashboard: 106.55.246.217:9001
