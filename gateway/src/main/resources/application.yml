@@ -7,6 +7,9 @@ spring:
     nacos:
       discovery:
         server-addr: 106.55.246.217:8848
+    sentinel:
+      transport:
+        dashboard: 172.16.0.12:9001
     gateway:
       discovery:
         locator:
