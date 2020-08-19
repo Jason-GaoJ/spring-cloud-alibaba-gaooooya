@@ -1,19 +1,2 @@
-spring:
-  cloud:
-    nacos:
-      discovery:
-        server-addr: 106.55.246.217:8848
-        ip: 106.55.246.217
-    sentinel:
-      transport:
-        dashboard: 106.55.246.217:9001
-    gateway:
-      discovery:
-        locator:
-          enabled: true
-          lower-case-service-id: true
-      routes:
-        - predicates:
-            - Path=/user/**
-          uri: lb://service-provider
-          id: service-provider
+server:
+  port: 8001

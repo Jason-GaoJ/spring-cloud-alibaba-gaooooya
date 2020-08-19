@@ -13,8 +13,12 @@ import java.util.Map;
 @SpringBootApplication
 public class GatewayApplication {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
         ConfigurableApplicationContext applicationContext=SpringApplication.run(GatewayApplication.class, args);
-        System.out.println("hahahaha"+applicationContext.getEnvironment().getProperty("msg"));
+        while (true){
+            System.out.println(applicationContext.getEnvironment().getProperty("msg"));
+            Thread.sleep(2000);
+        }
+
     }
 }
