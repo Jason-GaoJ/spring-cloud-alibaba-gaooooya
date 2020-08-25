@@ -7,5 +7,5 @@ spring:
     nacos:
       discovery:
         #当不是一个局域网时，需指定ip。否则nacos会访问当前内网ip导致无法访问
-        #ip: 106.55.246.217
+        ip: 106.55.246.217
         server-addr: 172.16.0.12:8848

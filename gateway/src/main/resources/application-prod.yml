@@ -7,6 +7,13 @@ spring:
     sentinel:
       transport:
         dashboard: 106.55.246.217:9001
+      datasource:
+        - nacos:
+            server-addr: 106.55.246.217:8848
+            data-id: gateway-sentinel
+            group-id: DEFAULT_GROUP
+            data-type: json
+            rule-type: flow
     gateway:
       discovery:
         locator:
