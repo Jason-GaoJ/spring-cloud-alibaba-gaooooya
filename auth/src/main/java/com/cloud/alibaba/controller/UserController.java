@@ -16,8 +16,4 @@ public class UserController {
     public String user(){
         return "gaooooya";
     }
-
-    public static void main(String[] args) {
-        System.out.println(new BCryptPasswordEncoder().encode("111111"));
-    }
 }

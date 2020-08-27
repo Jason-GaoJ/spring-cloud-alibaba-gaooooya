@@ -5,7 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
 
-//@EnableAuthorizationServer//启用授权服务
+@EnableAuthorizationServer//启用授权服务
 @SpringBootApplication
 public class Oauth2Application {
 

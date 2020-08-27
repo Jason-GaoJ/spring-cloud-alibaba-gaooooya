@@ -1,15 +1,13 @@
 package com.cloud.alibaba.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.scrypt.SCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 /**
  * @author Jason
@@ -23,26 +21,29 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     UserDetailsService userDetailsService;
 
-    /*@Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.inMemoryAuthentication()
-                .passwordEncoder(new BCryptPasswordEncoder())
-                .withUser("buzz")
-                .password(new BCryptPasswordEncoder().encode("111111"))
-                .authorities("ROLE_USER")
-                .and()
-                .withUser("woody")
-                .password(new BCryptPasswordEncoder().encode("222222"))
-                .authorities("ROLE_USER");
-    }*/
+    @Autowired
+    PasswordEncoder passwordEncoder;
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userDetailsService).passwordEncoder(new BCryptPasswordEncoder());
+        auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder);
     }
 
+
+    /**
+     * 配置了默认表单登陆以及禁用了 csrf 功能，并开启了httpBasic 认证
+     * @param http
+     * @throws Exception
+     */
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        super.configure(http);
+        http     // 配置登陆页/login并允许访问
+                .formLogin().permitAll()
+                // 登出页
+                .and().logout().logoutUrl("http://www.cnu.cc/").logoutSuccessUrl("https://fotomen.cn/")
+                // 其余所有请求全部需要鉴权认证
+                .and().authorizeRequests().anyRequest().authenticated()
+                // 由于使用的是JWT，我们这里不需要csrf
+                .and().csrf().disable();
     }
 }

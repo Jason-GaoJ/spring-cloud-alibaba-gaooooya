@@ -1,0 +1,29 @@
+server:
+  port: 8002
+spring:
+  application:
+    name: auth
+  # jpa设置数据库为MySQL
+  jpa:
+    database: mysql
+    show-sql: true
+  # 数据库设置
+  datasource:
+    url: jdbc:mysql://106.55.246.217:3306/gaooooya?useUnicode=true&characterEncoding=UTF-8
+    username: gy
+    password: 123456@Yy
+    driver-class-name: com.mysql.jdbc.Driver
+  # redis设置
+  redis:
+    database: 0
+    host: 106.55.246.217
+    port: 6379
+    password: 7b520e92h0@Yy
+  # jackson 设置
+  jackson:
+    date-format: java.text.SimpleDateFormat
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 106.55.246.217:8848
+        ip: 106.55.246.217
