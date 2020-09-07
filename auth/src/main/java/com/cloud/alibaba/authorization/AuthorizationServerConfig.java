@@ -3,6 +3,7 @@ package com.cloud.alibaba.authorization;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -11,6 +12,8 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.A
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
+import org.springframework.security.oauth2.provider.token.TokenStore;
+import org.springframework.security.oauth2.provider.token.store.InMemoryTokenStore;
 
 import javax.sql.DataSource;
 
@@ -29,20 +32,26 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     @Autowired
     DataSource dataSource;
 
+    @Autowired
+    AuthenticationManager authenticationManager;
+    //内存存储令牌
+    private TokenStore tokenStore=new InMemoryTokenStore();
+
     @Bean
     PasswordEncoder passwordEncoder() {
         return PasswordEncoderFactories.createDelegatingPasswordEncoder();
     }
 
     /**
-     * 定义授权和令牌终结点以及令牌服务。
+     * 来配置授权（authorization）以及令牌（token）的访问端点和令牌服务(token services)。
      *
      * @param endpoints
      * @throws Exception
      */
     @Override
     public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
-        endpoints.userDetailsService(userDetailsService);
+        endpoints.tokenStore(tokenStore)
+                .authenticationManager(authenticationManager);
     }
 
     /**
@@ -64,13 +73,18 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     }
 
     /**
-     * 定义令牌终结点上的安全约束。
+     * 用来配置令牌端点(Token Endpoint)的安全约束.
      *
      * @param security
      * @throws Exception
      */
     @Override
     public void configure(AuthorizationServerSecurityConfigurer security) throws Exception {
-        super.configure(security);
+        security
+                // 开启/oauth/token_key验证端口无权限访问
+                .tokenKeyAccess("permitAll()")
+                // 开启/oauth/check_token验证端口认证权限访问
+                .checkTokenAccess("isAuthenticated()")
+                .allowFormAuthenticationForClients();
     }
 }
